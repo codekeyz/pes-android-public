@@ -37,10 +37,6 @@ public class DatabaseImp implements DatabaseContract {
         return firestoreDB.collection(Constants.ManagersRef);
     }
 
-    @Override
-    public CollectionReference getBranchesReference() {
-        return firestoreDB.collection(Constants.BranchesRef);
-    }
 
     @Override
     public CollectionReference getClientsReference() {
@@ -65,5 +61,10 @@ public class DatabaseImp implements DatabaseContract {
     @Override
     public CollectionReference getWeeksReference() {
         return firestoreDB.collection(Constants.WeekTimelineRef);
+    }
+
+    @Override
+    public CollectionReference getDaysReference() {
+        return firestoreDB.collection(Constants.DayTimelineRef);
     }
 }

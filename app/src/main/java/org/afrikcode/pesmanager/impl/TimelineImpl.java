@@ -10,6 +10,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import org.afrikcode.pesmanager.base.BaseImp;
 import org.afrikcode.pesmanager.contracts.TimeStampContract;
+import org.afrikcode.pesmanager.models.Day;
 import org.afrikcode.pesmanager.models.Month;
 import org.afrikcode.pesmanager.models.Week;
 import org.afrikcode.pesmanager.models.Year;
@@ -21,7 +22,7 @@ import java.util.Map;
 
 public class TimelineImpl extends BaseImp<TimeStampView> implements TimeStampContract {
 
-    private CollectionReference yearsRef, monthsRef, mWeeksRef;
+    private CollectionReference yearsRef, monthsRef, mWeeksRef, mDaysRef;
     private String amountIndex, totalIndex;
 
     public TimelineImpl(String branchID, String branchName) {
@@ -29,6 +30,7 @@ public class TimelineImpl extends BaseImp<TimeStampView> implements TimeStampCon
         yearsRef = databaseImp.getYearsReference();
         monthsRef = databaseImp.getMonthsReference();
         mWeeksRef = databaseImp.getWeeksReference();
+        mDaysRef = databaseImp.getDaysReference();
         amountIndex = branchID.concat(branchName).concat("Total");
         totalIndex = branchID.concat(branchName).concat("Number");
     }
@@ -134,6 +136,41 @@ public class TimelineImpl extends BaseImp<TimeStampView> implements TimeStampCon
             }
         });
     }
+
+    @Override
+    public void getDaysinWeeK(String yearID, String monthID, String weekID) {
+        getView().showLoadingIndicator();
+        mDaysRef.whereEqualTo("yearID", yearID).whereEqualTo("monthID", monthID).whereEqualTo("weekID", weekID).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                getView().hideLoadingIndicator();
+                List<Day> dayList = new ArrayList<>();
+                for (DocumentSnapshot snapshot : documentSnapshots.getDocuments()) {
+                    Map<String, Object> data = snapshot.getData();
+
+                    Day day = new Day().maptoData(data);
+                    if (data.get(amountIndex) != null) {
+                        day.setTotalAmount(Double.valueOf(String.valueOf(data.get(amountIndex))));
+                    } else {
+                        day.setTotalAmount(0.0);
+                    }
+
+                    if (data.get(totalIndex) != null) {
+                        day.setTotalTransactions(Double.valueOf(String.valueOf(data.get(totalIndex))));
+                    } else {
+                        day.setTotalTransactions(0);
+                    }
+
+                    day.setId(snapshot.getId());
+                    dayList.add(day);
+                }
+
+                getView().ongetDaysinWeek(dayList);
+            }
+        });
+    }
+
+
 
 
 }

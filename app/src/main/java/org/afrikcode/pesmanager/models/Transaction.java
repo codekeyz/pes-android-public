@@ -16,12 +16,13 @@ public class Transaction {
     private String yearID;
     private String monthID;
     private String weekID;
+    private String dayID;
     private String createdAt;
 
     public Transaction() {
     }
 
-    public Transaction(String clientName, String clientID, String branchName, String branchID, String managerID, double amount, String yearID, String monthID, String weekID) {
+    public Transaction(String clientName, String clientID, String branchName, String branchID, String managerID, double amount, String yearID, String monthID, String weekID, String dayID) {
         this.clientID = clientID;
         this.clientName = clientName;
         this.branchID = branchID;
@@ -30,6 +31,7 @@ public class Transaction {
         this.yearID = yearID;
         this.monthID = monthID;
         this.weekID = weekID;
+        this.dayID = dayID;
         this.branchName = branchName;
     }
 
@@ -62,6 +64,9 @@ public class Transaction {
         if (weekID != null) {
             data.put("week", weekID);
         }
+        if (dayID != null) {
+            data.put("day", dayID);
+        }
         if (uid != null) {
             data.put("uid", uid);
         }
@@ -93,6 +98,9 @@ public class Transaction {
         }
         if (data.get("week") != null) {
             m.setWeekID(data.get("week").toString());
+        }
+        if (data.get("day") != null) {
+            m.setDayID(data.get("day").toString());
         }
         if (data.get("branchName") != null) {
             m.setBranchName(data.get("branchName").toString());
@@ -194,5 +202,13 @@ public class Transaction {
 
     public void setClientName(String clientName) {
         this.clientName = clientName;
+    }
+
+    public String getDayID() {
+        return dayID;
+    }
+
+    public void setDayID(String dayID) {
+        this.dayID = dayID;
     }
 }

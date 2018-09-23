@@ -14,9 +14,9 @@ import org.afrikcode.pesmanager.activities.HomeActivity;
 import org.afrikcode.pesmanager.adapter.WeekAdapter;
 import org.afrikcode.pesmanager.base.BaseFragment;
 import org.afrikcode.pesmanager.decorator.ItemOffsetDecoration;
-import org.afrikcode.pesmanager.fragments.ClientsFragment;
 import org.afrikcode.pesmanager.impl.TimelineImpl;
 import org.afrikcode.pesmanager.listeners.OnitemClickListener;
+import org.afrikcode.pesmanager.models.Day;
 import org.afrikcode.pesmanager.models.Month;
 import org.afrikcode.pesmanager.models.Week;
 import org.afrikcode.pesmanager.models.Year;
@@ -31,7 +31,7 @@ public class WeekFragment extends BaseFragment<TimelineImpl> implements OnitemCl
     @BindArray(R.array.weeks_array)
     String[] weeks;
     private WeekAdapter mWeekAdapter;
-    private String yearID, monthID;
+    private String yearID, monthID, branchName, branchID;
 
     public WeekFragment() {
         setTitle("Select Week");
@@ -42,7 +42,10 @@ public class WeekFragment extends BaseFragment<TimelineImpl> implements OnitemCl
         super.onCreate(savedInstanceState);
         HomeActivity activity = (HomeActivity) getContext();
         Utils utils = new Utils();
-        setImpl(new TimelineImpl(utils.getBranchID(activity), utils.getBranchName(activity)));
+        branchID = utils.getBranchID(activity);
+        branchName = utils.getBranchName(activity);
+
+        setImpl(new TimelineImpl(branchID, branchName));
         getImpl().setView(this);
     }
 
@@ -117,12 +120,14 @@ public class WeekFragment extends BaseFragment<TimelineImpl> implements OnitemCl
         if (data.isActive()){
             if (getFragmentListener() != null) {
                 Bundle b = new Bundle();
+                b.putString("BranchName", branchName);
+                b.getString("BranchID", branchID);
                 b.putString("YearID", yearID);
                 b.putString("MonthID", monthID);
                 b.putString("WeekID", data.getId());
-                ClientsFragment cf = new ClientsFragment();
-                cf.setArguments(b);
-                getFragmentListener().moveToFragment(cf);
+                DayFragment df = new DayFragment();
+                df.setArguments(b);
+                getFragmentListener().moveToFragment(df);
             }
         }else {
             Toast.makeText(getContext(), data.getName() + " not activated, Contact Administrator for help", Toast.LENGTH_SHORT).show();
@@ -143,5 +148,10 @@ public class WeekFragment extends BaseFragment<TimelineImpl> implements OnitemCl
     public void ongetMonthsinYear(List<Month> monthList) {
 
     }
+
+    @Override
+    public void ongetDaysinWeek(List<Day> dayList) {
+    }
+
 
 }

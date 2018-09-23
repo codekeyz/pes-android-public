@@ -16,6 +16,7 @@ import org.afrikcode.pesmanager.base.BaseFragment;
 import org.afrikcode.pesmanager.decorator.ItemOffsetDecoration;
 import org.afrikcode.pesmanager.impl.TimelineImpl;
 import org.afrikcode.pesmanager.listeners.OnitemClickListener;
+import org.afrikcode.pesmanager.models.Day;
 import org.afrikcode.pesmanager.models.Month;
 import org.afrikcode.pesmanager.models.Week;
 import org.afrikcode.pesmanager.models.Year;
@@ -134,6 +135,11 @@ public class YearFragment extends BaseFragment<TimelineImpl> implements OnitemCl
 
     @Override
     public void ongetWeeksinMonth(List<Week> weekList) {
+
+    }
+
+    @Override
+    public void ongetDaysinWeek(List<Day> dayList) {
 
     }
 

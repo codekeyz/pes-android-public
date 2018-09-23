@@ -10,8 +10,6 @@ public interface DatabaseContract {
 
     CollectionReference getManagersReference();
 
-    CollectionReference getBranchesReference();
-
     CollectionReference getClientsReference();
 
     CollectionReference getTransactionsReference();
@@ -22,4 +20,5 @@ public interface DatabaseContract {
 
     CollectionReference getWeeksReference();
 
+    CollectionReference getDaysReference();
 }

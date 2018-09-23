@@ -31,7 +31,7 @@ import java.util.List;
 public class TransactionsFragment extends BaseFragment<TransactionImpl> implements TransactionView, OnitemClickListener<Transaction>, SearchView.OnQueryTextListener {
 
     private TransactionAdapter mAdapter;
-    private String yearID, monthID, weekID, clientID, clientName, branchID, branchName, managerID;
+    private String yearID, monthID, weekID, dayID, clientID, clientName, branchID, branchName, managerID;
     private AlertDialog dialog;
 
     public TransactionsFragment() {
@@ -68,6 +68,7 @@ public class TransactionsFragment extends BaseFragment<TransactionImpl> implemen
             yearID = b.getString("YearID");
             monthID = b.getString("MonthID");
             weekID = b.getString("WeekID");
+            dayID = b.getString("DayID");
             clientID = b.getString("ClientID");
             clientName = b.getString("ClientName");
         }
@@ -128,7 +129,7 @@ public class TransactionsFragment extends BaseFragment<TransactionImpl> implemen
             @Override
             public void onClick(View view) {
                 String amount = et_amount.getText().toString().trim();
-                Transaction transaction = new Transaction(clientName, clientID, branchName, branchID, managerID, Double.valueOf(amount), yearID, monthID, weekID);
+                Transaction transaction = new Transaction(clientName, clientID, branchName, branchID, managerID, Double.valueOf(amount), yearID, monthID, weekID, dayID);
                 getImpl().addTransaction(transaction);
 
                 dialog.dismiss();

@@ -8,4 +8,6 @@ public interface TimeStampContract {
 
     void getWeeksinMonth(String yearID, String monthID);
 
+    void getDaysinWeeK(String yearID, String monthID, String weekID);
+
 }
