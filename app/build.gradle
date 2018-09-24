@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def newApkName = applicationId + "-" + variant.versionName + ".apk"
+            outputFileName = new File(variant.name, newApkName)
+        }
+    }
+
     compileSdkVersion 27
     defaultConfig {
         applicationId "org.afrikcode.pesmanager"
@@ -12,7 +20,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -21,10 +29,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'com.google.firebase:firebase-auth:11.8.0'
     implementation 'com.google.firebase:firebase-firestore:11.8.0'
-    implementation 'com.google.firebase:firebase-database:11.8.0'
     implementation 'com.google.firebase:firebase-messaging:11.8.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
