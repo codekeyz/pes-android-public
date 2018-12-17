@@ -12,6 +12,7 @@ import org.afrikcode.pesmanager.base.BaseImp;
 import org.afrikcode.pesmanager.contracts.TimeStampContract;
 import org.afrikcode.pesmanager.models.Day;
 import org.afrikcode.pesmanager.models.Month;
+import org.afrikcode.pesmanager.models.Service;
 import org.afrikcode.pesmanager.models.Week;
 import org.afrikcode.pesmanager.models.Year;
 import org.afrikcode.pesmanager.views.TimeStampView;
@@ -22,23 +23,52 @@ import java.util.Map;
 
 public class TimelineImpl extends BaseImp<TimeStampView> implements TimeStampContract {
 
-    private CollectionReference yearsRef, monthsRef, mWeeksRef, mDaysRef;
-    private String amountIndex, totalIndex;
+    private CollectionReference servicesRef, yearsRef, monthsRef, mWeeksRef, mDaysRef;
+    private String amountIndex;
 
     public TimelineImpl(String branchID, String branchName) {
         DatabaseImp databaseImp = new DatabaseImp();
+        servicesRef = databaseImp.getServicesReference();
         yearsRef = databaseImp.getYearsReference();
         monthsRef = databaseImp.getMonthsReference();
         mWeeksRef = databaseImp.getWeeksReference();
         mDaysRef = databaseImp.getDaysReference();
         amountIndex = branchID.concat(branchName).concat("Total");
-        totalIndex = branchID.concat(branchName).concat("Number");
+    }
+
+
+    @Override
+    public void getServices() {
+        getView().showLoadingIndicator();
+        servicesRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                getView().hideLoadingIndicator();
+                List<Service> serviceList = new ArrayList<>();
+                for (DocumentSnapshot snapshot: documentSnapshots.getDocuments()) {
+                    Map<String, Object> data = snapshot.getData();
+
+                    Service service = new Service().maptoData(data);
+
+                    if (data.get(amountIndex) != null) {
+                        service.setTotalAmount(Double.valueOf(String.valueOf(data.get(amountIndex))));
+                    } else {
+                        service.setTotalAmount(0.0);
+                    }
+
+                    service.setId(snapshot.getId());
+                    serviceList.add(service);
+                }
+
+                getView().ongetServices(serviceList);
+            }
+        });
     }
 
     @Override
-    public void getYears() {
+    public void getYears(String serviceID) {
         getView().showLoadingIndicator();
-        yearsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        yearsRef.whereEqualTo("serviceID", serviceID).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
                 getView().hideLoadingIndicator();
@@ -52,12 +82,6 @@ public class TimelineImpl extends BaseImp<TimeStampView> implements TimeStampCon
                         year.setTotalAmount(Double.valueOf(String.valueOf(data.get(amountIndex))));
                     } else {
                         year.setTotalAmount(0.0);
-                    }
-
-                    if (data.get(totalIndex) != null) {
-                        year.setTotalTransactions(Double.valueOf(String.valueOf(data.get(totalIndex))));
-                    } else {
-                        year.setTotalTransactions(0);
                     }
 
                     year.setId(snapshot.getId());
@@ -89,12 +113,6 @@ public class TimelineImpl extends BaseImp<TimeStampView> implements TimeStampCon
                         month.setTotalAmount(0.0);
                     }
 
-                    if (data.get(totalIndex) != null) {
-                        month.setTotalTransactions(Double.valueOf(String.valueOf(data.get(totalIndex))));
-                    } else {
-                        month.setTotalTransactions(0);
-                    }
-
                     month.setId(snapshot.getId());
                     monthList.add(month);
                 }
@@ -122,11 +140,6 @@ public class TimelineImpl extends BaseImp<TimeStampView> implements TimeStampCon
                         week.setTotalAmount(0.0);
                     }
 
-                    if (data.get(totalIndex) != null) {
-                        week.setTotalTransactions(Double.valueOf(String.valueOf(data.get(totalIndex))));
-                    } else {
-                        week.setTotalTransactions(0);
-                    }
 
                     week.setId(snapshot.getId());
                     weekList.add(week);
@@ -153,12 +166,6 @@ public class TimelineImpl extends BaseImp<TimeStampView> implements TimeStampCon
                         day.setTotalAmount(Double.valueOf(String.valueOf(data.get(amountIndex))));
                     } else {
                         day.setTotalAmount(0.0);
-                    }
-
-                    if (data.get(totalIndex) != null) {
-                        day.setTotalTransactions(Double.valueOf(String.valueOf(data.get(totalIndex))));
-                    } else {
-                        day.setTotalTransactions(0);
                     }
 
                     day.setId(snapshot.getId());

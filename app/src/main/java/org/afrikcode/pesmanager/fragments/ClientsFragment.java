@@ -34,7 +34,7 @@ public class ClientsFragment extends BaseFragment<ClientImpl> implements ClientV
     private ClientAdapter adapter;
     private AlertDialog dialog;
 
-    private String branchID, yearID, monthID, weekID, dayID;
+    private String serviceID, branchID, yearID, monthID, weekID, dayID;
 
     public ClientsFragment() {
         setTitle("Select a Client");
@@ -68,6 +68,7 @@ public class ClientsFragment extends BaseFragment<ClientImpl> implements ClientV
 
         if (getArguments() != null){
             Bundle b = getArguments();
+            serviceID = b.getString("ServiceID");
             yearID = b.getString("YearID");
             monthID = b.getString("MonthID");
             weekID = b.getString("WeekID");
@@ -189,6 +190,7 @@ public class ClientsFragment extends BaseFragment<ClientImpl> implements ClientV
         if (yearID != null && monthID != null && weekID != null) {
             if (getFragmentListener() != null) {
                 Bundle b = new Bundle();
+                b.putString("ServiceID", serviceID);
                 b.putString("YearID", yearID);
                 b.putString("MonthID", monthID);
                 b.putString("WeekID", weekID);

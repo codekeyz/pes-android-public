@@ -9,7 +9,6 @@ public class Week extends BaseTimeline<Week> {
 
     private String yearID;
     private String monthID;
-    private double totalAmount, totalTransactions;
 
     public Week() {
     }
@@ -51,19 +50,4 @@ public class Week extends BaseTimeline<Week> {
         this.yearID = yearID;
     }
 
-    public double getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(double totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public double getTotalTransactions() {
-        return totalTransactions;
-    }
-
-    public void setTotalTransactions(double totalTransactions) {
-        this.totalTransactions = totalTransactions;
-    }
 }

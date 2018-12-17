@@ -67,4 +67,9 @@ public class DatabaseImp implements DatabaseContract {
     public CollectionReference getDaysReference() {
         return firestoreDB.collection(Constants.DayTimelineRef);
     }
+
+    @Override
+    public CollectionReference getServicesReference() {
+        return firestoreDB.collection(Constants.serviceRef);
+    }
 }

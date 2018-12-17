@@ -8,6 +8,7 @@ public class Transaction {
     private String uid;
     private String clientID;
     private String clientName;
+    private String serviceID;
     private String branchID;
     private String branchName;
     private String managerID;
@@ -22,7 +23,8 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(String clientName, String clientID, String branchName, String branchID, String managerID, double amount, String yearID, String monthID, String weekID, String dayID) {
+    public Transaction(String serviceID, String clientName, String clientID, String branchName, String branchID, String managerID, double amount, String yearID, String monthID, String weekID, String dayID) {
+        this.serviceID = serviceID;
         this.clientID = clientID;
         this.clientName = clientName;
         this.branchID = branchID;
@@ -40,6 +42,9 @@ public class Transaction {
 
         // Ensuring that we don't pass null values which can override existing database data
 
+        if (serviceID != null){
+            data.put("serviceID", serviceID);
+        }
         if (clientID != null) {
             data.put("clientID", clientID);
         }
@@ -78,6 +83,9 @@ public class Transaction {
 
     public Transaction maptoData(Map<String, Object> data) {
         Transaction m = new Transaction();
+        if (data.get("serviceID") != null) {
+            m.setServiceID(data.get("serviceID").toString());
+        }
         if (data.get("clientID") != null) {
             m.setClientID(data.get("clientID").toString());
         }
@@ -170,6 +178,14 @@ public class Transaction {
 
     public void setYearID(String yearID) {
         this.yearID = yearID;
+    }
+
+    public String getServiceID() {
+        return serviceID;
+    }
+
+    public void setServiceID(String serviceID) {
+        this.serviceID = serviceID;
     }
 
     public String getMonthID() {

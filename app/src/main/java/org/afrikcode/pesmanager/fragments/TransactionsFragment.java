@@ -31,7 +31,7 @@ import java.util.List;
 public class TransactionsFragment extends BaseFragment<TransactionImpl> implements TransactionView, OnitemClickListener<Transaction>, SearchView.OnQueryTextListener {
 
     private TransactionAdapter mAdapter;
-    private String yearID, monthID, weekID, dayID, clientID, clientName, branchID, branchName, managerID;
+    private String serviceID, yearID, monthID, weekID, dayID, clientID, clientName, branchID, branchName, managerID;
     private AlertDialog dialog;
 
     public TransactionsFragment() {
@@ -65,6 +65,7 @@ public class TransactionsFragment extends BaseFragment<TransactionImpl> implemen
 
         if (getArguments() != null) {
             Bundle b = getArguments();
+            serviceID = b.getString("ServiceID");
             yearID = b.getString("YearID");
             monthID = b.getString("MonthID");
             weekID = b.getString("WeekID");
@@ -97,11 +98,11 @@ public class TransactionsFragment extends BaseFragment<TransactionImpl> implemen
         getSwipeRefresh().setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getImpl().getTransactions(branchID, clientID, yearID, monthID, weekID);
+                getImpl().getTransactions(branchID, serviceID, clientID, yearID, monthID, weekID);
             }
         });
 
-        getImpl().getTransactions(branchID, clientID, yearID, monthID, weekID);
+        getImpl().getTransactions(branchID, serviceID, clientID, yearID, monthID, weekID);
     }
 
     private void showAddTransactionDialog() {
@@ -129,7 +130,7 @@ public class TransactionsFragment extends BaseFragment<TransactionImpl> implemen
             @Override
             public void onClick(View view) {
                 String amount = et_amount.getText().toString().trim();
-                Transaction transaction = new Transaction(clientName, clientID, branchName, branchID, managerID, Double.valueOf(amount), yearID, monthID, weekID, dayID);
+                Transaction transaction = new Transaction(serviceID, clientName, clientID, branchName, branchID, managerID, Double.valueOf(amount), yearID, monthID, weekID, dayID);
                 getImpl().addTransaction(transaction);
 
                 dialog.dismiss();

@@ -2,7 +2,9 @@ package org.afrikcode.pesmanager.contracts;
 
 public interface TimeStampContract {
 
-    void getYears();
+    void getServices();
+
+    void getYears(String serviceID);
 
     void getMonthsinYear(String yearID);
 

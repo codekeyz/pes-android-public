@@ -5,19 +5,24 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import org.afrikcode.pesmanager.R;
 import org.afrikcode.pesmanager.Utils;
 import org.afrikcode.pesmanager.activities.HomeActivity;
-import org.afrikcode.pesmanager.adapter.YearAdapter;
+import org.afrikcode.pesmanager.adapter.TimelineAdapter;
 import org.afrikcode.pesmanager.base.BaseFragment;
 import org.afrikcode.pesmanager.decorator.ItemOffsetDecoration;
 import org.afrikcode.pesmanager.impl.TimelineImpl;
 import org.afrikcode.pesmanager.listeners.OnitemClickListener;
 import org.afrikcode.pesmanager.models.Day;
 import org.afrikcode.pesmanager.models.Month;
+import org.afrikcode.pesmanager.models.Service;
 import org.afrikcode.pesmanager.models.Week;
 import org.afrikcode.pesmanager.models.Year;
 import org.afrikcode.pesmanager.views.TimeStampView;
@@ -25,13 +30,29 @@ import org.afrikcode.pesmanager.views.TimeStampView;
 import java.util.List;
 
 
-public class YearFragment extends BaseFragment<TimelineImpl> implements OnitemClickListener<Year>, TimeStampView {
+public class YearFragment extends BaseFragment<TimelineImpl> implements OnitemClickListener<Year>, TimeStampView, SearchView.OnQueryTextListener {
 
-    private YearAdapter mYearAdapter;
+    private TimelineAdapter<Year> mYearAdapter;
+    private String serviceID;
 
     public YearFragment() {
         setTitle("Select Year");
     }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        MenuItem search = menu.getItem(0);
+        search.setVisible(true);
+
+        HomeActivity activity = (HomeActivity) getContext();
+        activity.getSearchView().setQueryHint("Search for a year...");
+
+        activity.getSearchView().setOnQueryTextListener(this);
+    }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,11 +61,17 @@ public class YearFragment extends BaseFragment<TimelineImpl> implements OnitemCl
         HomeActivity activity = (HomeActivity) getContext();
         setImpl(new TimelineImpl(utils.getBranchID(activity), utils.getBranchName(activity)));
         getImpl().setView(this);
+        setHasOptionsMenu(true);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (this.getArguments() != null) {
+            Bundle b = this.getArguments();
+            serviceID = b.getString("ServiceID");
+        }
 
         //setting a global layout manager
         getRv_list().setLayoutManager(new GridLayoutManager(getContext(), 2));
@@ -52,7 +79,7 @@ public class YearFragment extends BaseFragment<TimelineImpl> implements OnitemCl
         getRv_list().addItemDecoration(itemOffsetDecoration);
         getRv_list().setHasFixedSize(true);
 
-        mYearAdapter = new YearAdapter();
+        mYearAdapter = new TimelineAdapter<>();
         mYearAdapter.setOnclicklistener(this);
 
         getFab().setVisibility(View.GONE);
@@ -60,11 +87,11 @@ public class YearFragment extends BaseFragment<TimelineImpl> implements OnitemCl
         getSwipeRefresh().setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getImpl().getYears();
+                getImpl().getYears(serviceID);
             }
         });
 
-        getImpl().getYears();
+        getImpl().getYears(serviceID);
     }
 
 
@@ -96,6 +123,11 @@ public class YearFragment extends BaseFragment<TimelineImpl> implements OnitemCl
     }
 
     @Override
+    public void ongetServices(List<Service> serviceList) {
+
+    }
+
+    @Override
     public void showLoadingIndicator() {
         super.showLoadingIndicator();
 
@@ -115,6 +147,7 @@ public class YearFragment extends BaseFragment<TimelineImpl> implements OnitemCl
             if (getFragmentListener() != null) {
                 Bundle b = new Bundle();
                 b.putString("YearID", data.getId());
+                b.putString("ServiceID", serviceID);
                 MonthFragment mf = new MonthFragment();
                 mf.setArguments(b);
 
@@ -144,4 +177,15 @@ public class YearFragment extends BaseFragment<TimelineImpl> implements OnitemCl
     }
 
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        mYearAdapter.getFilter().filter(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        mYearAdapter.getFilter().filter(newText);
+        return false;
+    }
 }
