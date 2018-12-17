@@ -11,13 +11,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.afrikcode.pesmanager.R;
-import org.afrikcode.pesmanager.TimestampType;
 import org.afrikcode.pesmanager.Utils;
 import org.afrikcode.pesmanager.activities.HomeActivity;
 import org.afrikcode.pesmanager.adapter.TimelineAdapter;
