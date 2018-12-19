@@ -28,6 +28,7 @@ import org.afrikcode.pesmanager.R;
 import org.afrikcode.pesmanager.Utils;
 import org.afrikcode.pesmanager.base.BaseFragment;
 import org.afrikcode.pesmanager.fragments.ClientsFragment;
+import org.afrikcode.pesmanager.fragments.ServicesFragment;
 import org.afrikcode.pesmanager.fragments.timeline.YearFragment;
 import org.afrikcode.pesmanager.impl.AuthImp;
 import org.afrikcode.pesmanager.impl.ManagerImpl;
@@ -82,7 +83,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private void openDefaultFragment() {
         navigationView.setCheckedItem(R.id.nav_home);
-        YearFragment yf = new YearFragment();
+        ServicesFragment yf = new ServicesFragment();
         moveToFragment(yf);
     }
 

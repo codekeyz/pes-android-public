@@ -31,3 +31,4 @@
 -dontwarn java.nio.file.*
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 -dontwarn okio.**
+-keep class android.support.v7.widget.SearchView { *; }

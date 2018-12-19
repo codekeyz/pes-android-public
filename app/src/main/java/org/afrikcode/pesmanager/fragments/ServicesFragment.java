@@ -34,7 +34,6 @@ import java.util.List;
 public class ServicesFragment extends BaseFragment<TimelineImpl> implements SearchView.OnQueryTextListener, OnitemClickListener<Service>,TimeStampView {
 
     private TimelineAdapter<Service> mServiceAdapter;
-    private AlertDialog dialog;
 
     public ServicesFragment() {
         setTitle("Available Services");

@@ -36,7 +36,6 @@ public class TimelineImpl extends BaseImp<TimeStampView> implements TimeStampCon
         amountIndex = branchID.concat(branchName).concat("Total");
     }
 
-
     @Override
     public void getServices() {
         getView().showLoadingIndicator();
@@ -176,8 +175,4 @@ public class TimelineImpl extends BaseImp<TimeStampView> implements TimeStampCon
             }
         });
     }
-
-
-
-
 }
