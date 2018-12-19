@@ -24,9 +24,11 @@ import java.util.Map;
 public class TimelineImpl extends BaseImp<TimeStampView> implements TimeStampContract {
 
     private CollectionReference servicesRef, yearsRef, monthsRef, mWeeksRef, mDaysRef;
-    private String amountIndex;
+    private String amountIndex, branchID, branchName;
 
     public TimelineImpl(String branchID, String branchName) {
+        this.branchID = branchID;
+        this.branchName = branchName;
         DatabaseImp databaseImp = new DatabaseImp();
         servicesRef = databaseImp.getServicesReference();
         yearsRef = databaseImp.getYearsReference();
@@ -39,29 +41,32 @@ public class TimelineImpl extends BaseImp<TimeStampView> implements TimeStampCon
     @Override
     public void getServices() {
         getView().showLoadingIndicator();
-        servicesRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                getView().hideLoadingIndicator();
-                List<Service> serviceList = new ArrayList<>();
-                for (DocumentSnapshot snapshot: documentSnapshots.getDocuments()) {
-                    Map<String, Object> data = snapshot.getData();
+        servicesRef
+                .whereEqualTo("branchID", branchID)
+                .whereEqualTo("branchName", branchName)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                        getView().hideLoadingIndicator();
+                        List<Service> serviceList = new ArrayList<>();
+                        for (DocumentSnapshot snapshot : documentSnapshots.getDocuments()) {
+                            Map<String, Object> data = snapshot.getData();
 
-                    Service service = new Service().maptoData(data);
+                            Service service = new Service().maptoData(data);
 
-                    if (data.get(amountIndex) != null) {
-                        service.setTotalAmount(Double.valueOf(String.valueOf(data.get(amountIndex))));
-                    } else {
-                        service.setTotalAmount(0.0);
+                            if (data.get(amountIndex) != null) {
+                                service.setTotalAmount(Double.valueOf(String.valueOf(data.get(amountIndex))));
+                            } else {
+                                service.setTotalAmount(0.0);
+                            }
+
+                            service.setId(snapshot.getId());
+                            serviceList.add(service);
+                        }
+
+                        getView().ongetServices(serviceList);
                     }
-
-                    service.setId(snapshot.getId());
-                    serviceList.add(service);
-                }
-
-                getView().ongetServices(serviceList);
-            }
-        });
+                });
     }
 
     @Override
