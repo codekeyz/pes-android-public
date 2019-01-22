@@ -31,13 +31,14 @@ public class TransactionImpl extends BaseImp<TransactionView> implements Transac
 
 
     @Override
-    public void getTransactions(String branchID, String serviceID, String clientID, String yearID, String monthID, String weekID) {
+    public void getTransactions(String branchID, String serviceID, String clientID, String yearID, String monthID, String weekID, String dayID) {
         getView().showLoadingIndicator();
         transactionsRef.whereEqualTo("branchID", branchID)
                 .whereEqualTo("serviceID", serviceID)
                 .whereEqualTo("year", yearID)
                 .whereEqualTo("month", monthID)
                 .whereEqualTo("week", weekID)
+                .whereEqualTo("day", dayID)
                 .whereEqualTo("clientID", clientID)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override

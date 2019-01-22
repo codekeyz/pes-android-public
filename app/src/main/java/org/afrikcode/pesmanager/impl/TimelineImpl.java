@@ -24,7 +24,7 @@ import java.util.Map;
 public class TimelineImpl extends BaseImp<TimeStampView> implements TimeStampContract {
 
     private CollectionReference servicesRef, yearsRef, monthsRef, mWeeksRef, mDaysRef;
-    private String amountIndex, branchID, branchName;
+    private String branchID, branchName;
 
     public TimelineImpl(String branchID, String branchName) {
         this.branchID = branchID;
@@ -35,7 +35,6 @@ public class TimelineImpl extends BaseImp<TimeStampView> implements TimeStampCon
         monthsRef = databaseImp.getMonthsReference();
         mWeeksRef = databaseImp.getWeeksReference();
         mDaysRef = databaseImp.getDaysReference();
-        amountIndex = branchID.concat(branchName).concat("Total");
     }
 
     @Override
@@ -53,13 +52,6 @@ public class TimelineImpl extends BaseImp<TimeStampView> implements TimeStampCon
                             Map<String, Object> data = snapshot.getData();
 
                             Service service = new Service().maptoData(data);
-
-                            if (data.get(amountIndex) != null) {
-                                service.setTotalAmount(Double.valueOf(String.valueOf(data.get(amountIndex))));
-                            } else {
-                                service.setTotalAmount(0.0);
-                            }
-
                             service.setId(snapshot.getId());
                             serviceList.add(service);
                         }
@@ -81,13 +73,6 @@ public class TimelineImpl extends BaseImp<TimeStampView> implements TimeStampCon
                     Map<String, Object> data = snapshot.getData();
 
                     Year year = new Year().maptoData(data);
-
-                    if (data.get(amountIndex) != null) {
-                        year.setTotalAmount(Double.valueOf(String.valueOf(data.get(amountIndex))));
-                    } else {
-                        year.setTotalAmount(0.0);
-                    }
-
                     year.setId(snapshot.getId());
                     yearList.add(year);
                 }
@@ -109,14 +94,6 @@ public class TimelineImpl extends BaseImp<TimeStampView> implements TimeStampCon
                     Map<String, Object> data = snapshot.getData();
 
                     Month month = new Month().maptoData(data);
-                    Log.d("Month" + amountIndex, data.toString());
-
-                    if (data.get(amountIndex) != null) {
-                        month.setTotalAmount(Double.valueOf(String.valueOf(data.get(amountIndex))));
-                    } else {
-                        month.setTotalAmount(0.0);
-                    }
-
                     month.setId(snapshot.getId());
                     monthList.add(month);
                 }
@@ -138,13 +115,6 @@ public class TimelineImpl extends BaseImp<TimeStampView> implements TimeStampCon
                     Map<String, Object> data = snapshot.getData();
 
                     Week week = new Week().maptoData(data);
-                    if (data.get(amountIndex) != null) {
-                        week.setTotalAmount(Double.valueOf(String.valueOf(data.get(amountIndex))));
-                    } else {
-                        week.setTotalAmount(0.0);
-                    }
-
-
                     week.setId(snapshot.getId());
                     weekList.add(week);
                 }
@@ -166,12 +136,6 @@ public class TimelineImpl extends BaseImp<TimeStampView> implements TimeStampCon
                     Map<String, Object> data = snapshot.getData();
 
                     Day day = new Day().maptoData(data);
-                    if (data.get(amountIndex) != null) {
-                        day.setTotalAmount(Double.valueOf(String.valueOf(data.get(amountIndex))));
-                    } else {
-                        day.setTotalAmount(0.0);
-                    }
-
                     day.setId(snapshot.getId());
                     dayList.add(day);
                 }

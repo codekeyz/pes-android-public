@@ -30,6 +30,11 @@ public class Service extends BaseTimeline<Service> {
         m.setBranchID(data.get("branchID").toString());
         m.setBranchName(data.get("branchName").toString());
         m.setActive(Boolean.valueOf(data.get("isActive").toString()));
+        if (data.get("totalAmount") != null) {
+            m.setTotalAmount(Double.valueOf(data.get("totalAmount").toString()));
+        }else {
+            m.setTotalAmount(0.0);
+        }
         return m;
     }
 

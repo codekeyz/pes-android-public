@@ -35,6 +35,8 @@ public class Day extends BaseTimeline<Day> {
         d.setActive(Boolean.valueOf(data.get("isActive").toString()));
         if (data.get("totalAmount") != null) {
             d.setTotalAmount(Double.valueOf(data.get("totalAmount").toString()));
+        }else {
+            d.setTotalAmount(0.0);
         }
         return d;
     }

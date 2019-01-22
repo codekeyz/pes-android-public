@@ -98,11 +98,11 @@ public class TransactionsFragment extends BaseFragment<TransactionImpl> implemen
         getSwipeRefresh().setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getImpl().getTransactions(branchID, serviceID, clientID, yearID, monthID, weekID);
+                getImpl().getTransactions(branchID, serviceID, clientID, yearID, monthID, weekID, dayID);
             }
         });
 
-        getImpl().getTransactions(branchID, serviceID, clientID, yearID, monthID, weekID);
+        getImpl().getTransactions(branchID, serviceID, clientID, yearID, monthID, weekID, dayID);
     }
 
     private void showAddTransactionDialog() {

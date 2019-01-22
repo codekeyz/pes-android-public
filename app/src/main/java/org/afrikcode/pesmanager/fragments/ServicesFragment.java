@@ -139,8 +139,6 @@ public class ServicesFragment extends BaseFragment<TimelineImpl> implements Sear
         }
 
         hideErrorLayout();
-        getFab().setVisibility(View.VISIBLE);
-
         // pass data to adapter
 
         mServiceAdapter.setItemList(serviceList);
@@ -152,7 +150,6 @@ public class ServicesFragment extends BaseFragment<TimelineImpl> implements Sear
         getInfoText().setVisibility(View.VISIBLE);
 
     }
-
 
     @Override
     public void ongetYears(List<Year> yearList) {
