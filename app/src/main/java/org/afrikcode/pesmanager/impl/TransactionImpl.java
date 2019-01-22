@@ -34,7 +34,7 @@ public class TransactionImpl extends BaseImp<TransactionView> implements Transac
     public void getTransactions(String branchID, String serviceID, String clientID, String yearID, String monthID, String weekID) {
         getView().showLoadingIndicator();
         transactionsRef.whereEqualTo("branchID", branchID)
-                .whereEqualTo("service", serviceID)
+                .whereEqualTo("serviceID", serviceID)
                 .whereEqualTo("year", yearID)
                 .whereEqualTo("month", monthID)
                 .whereEqualTo("week", weekID)

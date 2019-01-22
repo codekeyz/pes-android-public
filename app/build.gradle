@@ -6,7 +6,7 @@ android {
         config {
             keyAlias 'key0'
             keyPassword 'Codemonster123'
-            storeFile file('PESAdminKeystore.jks')
+            storeFile file('PES-Manager-Key.jks')
             storePassword 'Codemonster123'
         }
     }

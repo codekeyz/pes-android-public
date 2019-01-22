@@ -8,12 +8,12 @@ public class Transaction {
     private String uid;
     private String clientID;
     private String clientName;
-    private String serviceID;
     private String branchID;
     private String branchName;
     private String managerID;
     private double amount;
 
+    private String serviceID;
     private String yearID;
     private String monthID;
     private String weekID;
